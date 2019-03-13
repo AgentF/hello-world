@@ -27,4 +27,5 @@ body {
   align-items: center;
   background: var(--backgroundColor);
   color: var(--textColor);
+  transition: all .5s ease-in-out;
 }
