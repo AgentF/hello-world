@@ -1,33 +1,93 @@
+//Immediately-Invoked-Function-Expression
 (() => {
-  //getting some elements
+  // DOM elements
   const principalContainer = document.querySelector('.principal-container');
   const header = document.querySelector('.header');
   const headerToggleSidebarButton = document.querySelector('.header-toggle-sidebar-button');
   const sidebarButton = document.querySelector('.sidebar-button');
   const sidebar = document.querySelector('.sidebar');
-
   const toggleableThemeElements = [
     principalContainer,
-    sidebar
+    sidebar,
   ];
 
-  // some functions
+  // info
+  const today = new Date();
+  const hours = today.getUTCHours();
+  const darkHours = hours >= 17 && hours <= 23 || hours >= 0 && hours <= 7;
+  const themes = [
+    'light-theme',
+    'dark-theme',
+  ];
+  const cards = [
+    {
+      title: 'Thoughts',
+      icon: 'bubble_chart',
+    },
+    {
+      title: 'Inspiration',
+      icon: 'local_florist',
+    },
+    {
+      title: 'Desings',
+      icon: 'web',
+    },
+    {
+      title: 'Front-End',
+      icon: 'laptop',
+    },
+    {
+      title: 'Back-End',
+      icon: 'developer_board',
+    },
+    {
+      title: 'DataBase',
+      icon: 'storage',
+    },
+    {
+      title: 'APIs',
+      icon: 'devices_other',
+    },
+  ];
+  const cardsString = cards.reduce((accumulator, { title, icon }) => accumulator += 
+    `<div class="principal-container-card">
+      <div class="principal-container-card-header">
+        <i class="material-icons">${icon}</i>
+      </div>
+      <div class="principal-container-card-footer">
+        ${title}
+        <i class="material-icons">more_vert</i>
+      </div>
+    </div>`
+  , '');
+  principalContainer.innerHTML = cardsString;
+  // methods
+  const getTheme = (DOMElement) => {
+    let output = false;
+    themes.forEach(theme => {
+      if (DOMElement.classList.contains(theme))
+        output = theme;
+    });
+    if (output)
+      return output;
+    else
+      console.error('No theme found in: ', DOMElement.className);
+  }
+
+  const isSidebarVisible = () => sidebar.classList.contains('sidebar-visible');
+
   const toggleLightDarkTheme = () => {
     toggleableThemeElements.forEach(DOMElement => {
-      const isInLightTheme = DOMElement.classList.contains('light-theme');
-      const isInDarkTheme = DOMElement.classList.contains('dark-theme');
-
-      if (isInLightTheme)
+      const theme = getTheme(DOMElement);
+      if (theme === 'light-theme')
         DOMElement.classList.replace('light-theme', 'dark-theme');
-      else if (isInDarkTheme)
+      else if (theme === 'dark-theme')
         DOMElement.classList.replace('dark-theme', 'light-theme');
     });
   }
 
   const openSidebar = () => {
-    console.log('openSidebar')
-    const isVisible = sidebar.classList.contains('sidebar-visible');
-    if (isVisible) {
+    if (isSidebarVisible()) {
       console.error('Sidebar already open');
       return;
     }
@@ -35,9 +95,7 @@
   }
 
   const closeSidebar = () => {
-    console.log('closeSidebar')
-    const isVisible = sidebar.classList.contains('sidebar-visible');
-    if (!isVisible) {
+    if (!isSidebarVisible()) {
       console.error('Sidebar already closed');
       return;
     }
@@ -45,26 +103,18 @@
   }
 
   const toggleSidebar = () => {
-    const isVisible = sidebar.classList.contains('sidebar-visible');
-
-    if (isVisible)
+    if (isSidebarVisible())
       closeSidebar();
     else
       openSidebar();
   }
 
-  // getting some info
-  const today = new Date();
-  const hours = today.getUTCHours();
-  const darkHours = hours >= 17 && hours <= 23 || hours >= 0 && hours <= 7;
-
-  //adding some listeners
+  //listeners
   if (headerToggleSidebarButton) {
-    headerToggleSidebarButton.addEventListener('click', openSidebar);
+    headerToggleSidebarButton.addEventListener('click', toggleSidebar);
   } else {
     console.error('Sidebar Button not found');
   }
-
   if (header) {
     header.addEventListener('click', e => {
       console.log({
@@ -80,13 +130,11 @@
   } else {
     console.error('Header not found');
   }
-
   if (sidebarButton) {
     sidebarButton.addEventListener('click', toggleLightDarkTheme);
   } else {
     console.error('Sidebar Button not found');
   }
-
   if (principalContainer) {
     principalContainer.addEventListener('click', closeSidebar);
     if (darkHours) {

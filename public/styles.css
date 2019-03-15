@@ -12,7 +12,7 @@
   --secondaryColorLight: #b0ff57;
   --secondaryColorDark: #32cb00;
   --textOnSecondaryColor: #000;
-  --boxShadow: 0px 0px 5px 5px rgba(0,0,0,.5);
+  --boxShadow: 0px 0px 5px 5px rgba(0,0,0,.3);
 }
 
 * {
@@ -20,15 +20,19 @@
 }
 
 .light-theme {
-  --backgroundColor: #ddd;
+  --backgroundColor: #fff;
+  --backgroundSecondaryColor: #ddd;
   --decorationColor: #333;
   --textOnBackgroundColor: #000;
+  --higlightColor: rgba(0,0,0,.3);
 }
 
 .dark-theme {
-  --backgroundColor: #333;
+  --backgroundColor: #000;
+  --backgroundSecondaryColor: #222;
   --decorationColor: #ddd;
   --textOnBackgroundColor: #fff;
+  --higlightColor: rgba(255,255,255,.3);
 }
 
 html, body, .principal-container {
@@ -55,36 +59,46 @@ button {
 .header {
   position: fixed;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 10px;
   height: var(--headerHeight);
   width: 100%;
   background-color: var(--primaryColor);
-  color: var(--textOnPrimaryColor);
+  color: #fff;
   box-shadow: var(--boxShadow);
   transition: var(--bigElementTransition);
 }
 
-.header-toggle-sidebar-button {
-  --size: 45px;
+.avatar {
+  --size: calc(var(--headerHeight) * 2/3);
   height: var(--size);
   width: var(--size);
-  color: var(--textOnPrimaryColor);
+  background-color: rgba(255,255,255,.5);
+  border-radius: calc(var(--size) / 2);
 }
 
-.header-toggle-sidebar-button:hover {
-  background-color: var(--secondaryColorLight);
-  color: var(--textOnSecondaryColor);
+.header-toggle-sidebar-button {
+  --size: calc(var(--headerHeight) * 2/3);
+  height: var(--size);
+  width: var(--size);
+  color: var(--decorationColor);
+  font-size: calc(var(--size) * 3/4)
+}
+
+.header-toggle-sidebar-button > i {
+  font-size: inherit;
+  color: inherit;
 }
 
 .header-toggle-sidebar-button:focus {  
-  color: var(--textOnSecondaryColor);
-  outline: var(--secondaryColorLight);
-  background-color: var(--secondaryColorDark);
+  outline: none;
 }
 
 .sidebar {
   position: fixed;
+  display: flex;
+  flex-flow: column nowrap;
   background-color: var(--backgroundColor);
   color: var(--textOnBackgroundColor);
   height: 100%;
@@ -96,16 +110,20 @@ button {
 }
 
 .sidebar-visible {
-  left: 0;
+  right: 0;
 }
 
 .sidebar-hidden {
-  left: -100%;
+  right: -100%;
 }
 
 .sidebar-header {
-  height: 100px;
+  height: 150px;
   background-color: var(--secondaryColor);
+}
+
+.sidebar-sections {
+  flex-grow: 1;
 }
 
 .sidebar-section {
@@ -115,13 +133,22 @@ button {
   border-bottom: 1px solid var(--decorationColor);
 }
 
+.sidebar-footer {
+  justify-self: flex-end;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
 .sidebar-button {
-  height: 40px;
+  --size: 40px;
+  height: var(--size);
+  border-radius: calc(var(--size) / 2);
   padding: 0 5px;
 }
 
 .sidebar-button:hover {
-  background-color: rgba(0,0,0,.5);
+  background-color: var(--higlightColor);
 }
 
 .sidebar-button:focus {
@@ -133,11 +160,51 @@ button {
 }
 
 .principal-container {
-  padding: var(--headerHeight) 10px 10px 10px;
+  padding: calc(var(--headerHeight) + 20px) 10px 10px 10px;
+  overflow: auto;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, 200px);
+  grid-template-rows: repeat(auto-fill, 250px);
+  grid-column-gap: 15px;
+  grid-row-gap: 15px;
+  background-color: var(--backgroundSecondaryColor);
+  color: var(--textOnBackgroundColor);
+  transition: var(--bigElementTransition);
+}
+
+.principal-container-card {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 10px 5px rgba(0,0,0,.3);
+}
+
+.principal-container-card-header {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.principal-container-card-header i {
+  --size: 50px;
+  font-size: var(--size);
+  height: var(--size);
+  width: var(--size);
+}
+
+.principal-container-card-footer {
   background-color: var(--backgroundColor);
-  color: var(--textOnBackgroundColor);
-  transition: var(--bigElementTransition);
+  padding: 5px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
